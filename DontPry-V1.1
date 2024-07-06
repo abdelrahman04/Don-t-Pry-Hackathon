@@ -1,0 +1,48 @@
+# Import necessary libraries from MP-SPDZ
+from Compiler.library import print_ln
+from Compiler.types import sint, sfix, Array, regint
+
+# Function to calculate the squared Euclidean distance between two points
+def squared_euclidean_distance(x1, y1, x2, y2):
+    return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)
+
+# Read the number of participants
+num_participants = sint.get_input_from(0)
+
+# Coordinates of the individual in need (initiator)
+x_in_need = sfix.get_input_from(0)
+y_in_need = sfix.get_input_from(0)
+
+# Coordinates of the other individuals
+x_others = Array(num_participants, sfix)
+y_others = Array(num_participants, sfix)
+
+for i in range(num_participants):
+    x_others[i] = sfix.get_input_from(i + 1)
+    y_others[i] = sfix.get_input_from(i + 1)
+
+# Calculate squared distances
+distances = Array(num_participants, sfix)
+for i in range(num_participants):
+    distances[i] = squared_euclidean_distance(x_in_need, y_in_need, x_others[i], y_others[i])
+
+# Find the minimum distance and the index of the closest individual
+min_distance = distances[0]
+closest_index = sint(0)
+for i in range(1, num_participants):
+    is_closer = distances[i] < min_distance
+    min_distance = is_closer.if_else(distances[i], min_distance)
+    closest_index = is_closer.if_else(sint(i), closest_index)
+
+# Reveal the index of the closest individual
+closest_index_revealed = closest_index.reveal()
+
+# Convert the revealed index to regint for indexing purposes
+closest_index_regint = regint(closest_index_revealed)
+
+# Send the coordinates of the individual in need to the closest individual
+x_out = x_in_need.reveal_to(closest_index_regint + 1)
+y_out = y_in_need.reveal_to(closest_index_regint + 1)
+
+print_ln('The closest individual is %s', closest_index_revealed)
+
