@@ -13,9 +13,7 @@ def send_data(port, data):
             client_socket.sendall(data.encode('utf-8'))
             print(f"Sent data to port {port}: {data}")
             print(sys.argv[4])
-            print("taba3t")
-            if sys.argv[4] == '10':
-                print("ayhaga python.py")
+            if sys.argv[4] == '6':
                 while True:
                     try:
                         received_data = client_socket.recv(1024).decode('utf-8')

@@ -31,7 +31,7 @@ public class HelloApplication extends Application {
         //create a new scene that will be displayed in the stage which contains a photo named map.png and when the photo is clicked, the exact position in the photo clicked will be displayed
         Image image = new Image(new File("map.png").toURI().toString());
         ImageView imageView = new ImageView(image);
-        //set the image to be flexible with the page with the height being less than the heigh of the page by 20 pixels
+        //set the image to be flexible with the page with the height being less than the height of the page by 20 pixels
         imageView.fitWidthProperty().bind(stage.widthProperty());
         imageView.fitHeightProperty().bind(stage.heightProperty().subtract(100));
         AtomicInteger xpos = new AtomicInteger();
@@ -49,30 +49,23 @@ public class HelloApplication extends Application {
                 String shedUUID = hashUUID(UUID);
                 hashs.add(shedUUID);
                 String s = runScript("src/Server.py", (int) (xpos.get() * 100 / imageView.getImage().getWidth()), (int) (ypos.get() * 100 / imageView.getImage().getHeight()), shedUUID);
-//                System.out.println("abl matba3 s" + s.length());
-//                System.out.println(s);
-//                System.out.println("taba3t s");
                 assert s != null;
                 String[] ss = s.split(" ");
-//                for(var f:ss){
-//                    System.out.println(f);
-//                    System.out.println("ended");
-//                }
                 String ResultHash = ss[ss.length - 1];
                 if (ResultHash.isEmpty())
                     ResultHash = " ";
                 ResultHash = ResultHash.substring(0, ResultHash.length() - 1);
-                if (times == 10) {
-                    for(int i=0;i<hashs.size();i++){
+                if (times == 6) {
+                    for(int i=1;i<hashs.size();i++){
                         String hashedUUID=hashs.get(i);
                         if (ResultHash.equals(hashedUUID)) {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
                             alert.setTitle("User" +(i));
-                            alert.setHeaderText("Contact the main headquarters immedietly");
+                            alert.setHeaderText("Contact the main headquarters immediately");
                             alert.showAndWait();
                         } else {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("User" +(i+1));
+                            alert.setTitle("User" +(i));
                             alert.setHeaderText("it's not you");
                             alert.showAndWait();
                         }
